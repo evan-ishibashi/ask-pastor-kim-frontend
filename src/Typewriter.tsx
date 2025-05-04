@@ -16,7 +16,7 @@ export default function Typewriter({ text }: { text: string }) {
                 key={`${lineIndex}-${wordIndex}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay, duration: 0.1 }}
+                transition={{ delay, duration: 0.5 }}
                 className="inline-block mr-2"
               >
                 {word}

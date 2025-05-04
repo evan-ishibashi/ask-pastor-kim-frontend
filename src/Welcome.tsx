@@ -10,8 +10,6 @@ become a member?'"
 
 export default function Welcome(){
 
-    console.log(welcomeText)
-
     return(
         <>
         <div className='justify-self-center'>
