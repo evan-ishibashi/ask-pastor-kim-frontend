@@ -23,7 +23,7 @@ export default function Welcome({ firstRender }: { firstRender: Boolean; }) {
                     exit={{ opacity: 0, y: -100 }}    // On exit: slide up and fade out
                     transition={{ duration: 0.1 }}     // Duration of animation
                 >
-                    <div className='justify-self-center'>
+                    <div className=''>
                         <img
                             src={aiKim}
                             alt="ai-kim-kira"
