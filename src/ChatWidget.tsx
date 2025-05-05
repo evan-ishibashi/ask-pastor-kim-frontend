@@ -3,26 +3,30 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Welcome from "./Welcome";
+import Messages from "./Messages";
+import {MessageType} from "./interface"
 
-interface Message {
-  sender: "user" | "bot";
-  text: string;
-}
+
 
 const MAX_ROWS = 5; // Max rows before scrolling
 const MIN_ROWS = 1; // Minimum rows (starting height)
 
 export default function ChatWidget() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<MessageType[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [firstRender,setFirstRender] = useState<Boolean>(true);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
 
   //Handles Text Area Sizing
   useEffect(()=>{
     if (textareaRef.current) textareaRef.current.focus()
   },[messages])
+
+  useEffect(() => {
+    lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -44,17 +48,18 @@ export default function ChatWidget() {
     if (!input.trim()) return;
     if (firstRender) setFirstRender(false)
 
-    const userMessage: Message = { sender: "user", text: input };
+    const userMessage: MessageType = { sender: "user", text: input };
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setLoading(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8001/ask", { question: input });
-      const botMessage: Message = { sender: "bot", text: response.data.answer };
+      const response = await axios.post("https://ask-pastor-kim-backend.onrender.com/ask", { question: input });
+      console.log(response)
+      const botMessage: MessageType = { sender: "bot", text: response.data.answer, links:response.data.sources };
       setMessages(prev => [...prev, botMessage]);
     } catch (err) {
-      const errorMsg: Message = { sender: "bot", text: "Sorry, something went wrong." };
+      const errorMsg: MessageType = { sender: "bot", text: "Sorry, something went wrong." };
       setMessages(prev => [...prev, errorMsg]);
     } finally {
       setLoading(false);
@@ -65,17 +70,11 @@ export default function ChatWidget() {
   return (
     <div className="max-w-md mx-auto p-4 border rounded shadow-lg bg-white h-screen flex flex-col">
       <div className="flex-1 overflow-y-auto space-y-4 mb-4">
-        {firstRender && <Welcome/>}
-        {messages.map((msg, idx) => (
-          <div
-            key={idx}
-            className={`p-2 rounded-xl max-w-fit ${
-              msg.sender === "user" ? "bg-blue-100 justify-self-end" : "bg-gray-100 justify-self-start"
-            }`}
-          >
-            {msg.text}
-          </div>
-        ))}
+
+        <Welcome firstRender={firstRender}/>
+
+        <Messages messages={messages} lastMessageRef={lastMessageRef} />
+
         {loading && (
           <div className="text-gray-400 text-sm">Thinking...</div>
         )}
