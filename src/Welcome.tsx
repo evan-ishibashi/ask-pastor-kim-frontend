@@ -23,11 +23,14 @@ export default function Welcome({ firstRender }: { firstRender: Boolean; }) {
                     exit={{ opacity: 0, y: -100 }}    // On exit: slide up and fade out
                     transition={{ duration: 0.1 }}     // Duration of animation
                 >
-                    <div className=''>
+                    <div className='flex flex-col max-h-fit justify-center'>
+                        <div className='flex max-h-fit justify-center'>
+
                         <img
                             src={aiKim}
                             alt="ai-kim-kira"
-                            className='rounded-full size-52 justify-self-center' />
+                            className='rounded-full size-52' />
+                        </div>
                     </div>
                     <br />
                     <div className='p-2 rounded-xl max-w-fit bg-gray-100'>

@@ -68,7 +68,7 @@ export default function ChatWidget() {
 
 
   return (
-    <div className="max-w-md mx-auto p-4 border rounded shadow-lg bg-white h-screen flex flex-col">
+    <div className="max-w-md mx-auto p-4 border rounded shadow-lg bg-white h-screen flex flex-col xs:h-auto">
       <div className="flex-1 overflow-y-auto space-y-4 mb-4">
 
         <Welcome firstRender={firstRender}/>
